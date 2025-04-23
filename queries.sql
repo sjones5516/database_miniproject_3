@@ -1,0 +1,4 @@
+SELECT order_item.product_id, product.name, SUM(order_item.quantity) AS total_sold FROM order_item, product WHERE product.product_id = order_item.product_id GROUP BY order_item.product_id ORDER BY total_sold DESC LIMIT 5;
+SELECT product_id, name FROM product WHERE stock < 25;
+SELECT order.customer_id, customer.name, COUNT(order.order_id) as quantity FROM `order`, customer WHERE order.customer_id = customer.customer_id GROUP BY order.customer_id ORDER BY quantity DESC LIMIT 5;
+SELECT order_item.product_id, product.name FROM `order`, order_item, product WHERE order.order_date > '2025-04-10' AND order.order_date < '2025-04-15' AND order.order_id = order_item.order_id AND order_item.product_id = product.product_id GROUP BY order_item.product_id;
