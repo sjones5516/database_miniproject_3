@@ -28,6 +28,9 @@
                 foreach ($_SESSION['cart'] as $key => $value) {
                     $sql = sprintf('INSERT INTO order_item (order_id, product_id, quantity) VALUES (%s, %s, %s);', $order_id, $key, $value);
                     mysqli_query($connection, $sql);
+
+                    $sql = sprintf("UPDATE product SET stock = stock - %d WHERE product_id = %d", $value, $key);
+                    mysqli_query($connection, $sql);
                 }
 
                 // Do the transaction query
@@ -36,7 +39,7 @@
                 $row = mysqli_fetch_array($result);
                 $transaction_id = $row['transaction_id'] + 1;
 
-                $sql = 'SELECT net FROM transaction;';
+                $sql = 'SELECT net FROM transaction ORDER BY transaction_id DESC LIMIT 1;';
                 $result = mysqli_query($connection, $sql);
                 $row = mysqli_fetch_array($result);
                 $net = $row['net'] + $total;

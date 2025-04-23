@@ -1,9 +1,9 @@
 <?php
     session_start();
-    $db_server = "";
-    $db_user = "";
+    $db_server = "localhost";
+    $db_user = "root";
     $db_pass = "";
-    $db_name = "";
+    $db_name = "pharm_db_project";
 
     $connection = mysqli_connect($db_server, $db_user, $db_pass, $db_name);
     if (mysqli_connect_error()) {
@@ -85,6 +85,9 @@
         while ($row = mysqli_fetch_assoc($query)) {
             $transaction_id++;
             $sql = sprintf("INSERT INTO restock_request (transaction_id, product_id, supplier_id, quantity) VALUES (%d, %d, %d, %d);",  $transaction_id, $row['product_id'], $supplier_id, 25 - $row['stock']);
+            mysqli_query($connection, $sql);
+
+            $sql = sprintf("UPDATE product SET stock = 25 WHERE product_id = %d", $row['product_id']);
             mysqli_query($connection, $sql);
         }
     }
